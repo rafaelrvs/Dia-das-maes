@@ -13,7 +13,7 @@ import CardResult from "./Components/CardResult/CardResult";
 import { generateMessageAction } from "./action/postMessage";
 
 export default function Home() {
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nomeMae, setNomeMae] = useState("");
   const [seuNome, setSeuNome] = useState("");
@@ -39,7 +39,7 @@ export default function Home() {
   // Gera preview ao selecionar arquivo
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const sel = e.target.files?.[0] ?? null;
-    setFile(sel);
+  
     if (sel) setPreviewUrl(URL.createObjectURL(sel));
   };
 
@@ -131,7 +131,7 @@ export default function Home() {
 
           <div className="h-48 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden bg-gray-50">
             {previewUrl ? (
-              <img
+              <Image
                 src={previewUrl}
                 alt="preview"
                 className="object-contain w-full h-full"

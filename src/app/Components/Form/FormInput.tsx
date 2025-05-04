@@ -1,7 +1,4 @@
 "use client"
-
-import { ReactNode } from "react";
-
 type InputRootProps = React.ComponentProps<"input">
 
 export default function FormInput(
