@@ -20,6 +20,7 @@ export default function Home() {
   const [mensagem, setMensagem] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalTela, setModalTela] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -58,7 +59,7 @@ export default function Home() {
     e.preventDefault();
     if (!nomeMae.trim() || !seuNome.trim()) {
       return alert("Por favor, preencha o nome da mãe e o seu nome.");
-    }
+      }
 
     setLoading(true);
     setShowResult(false);
@@ -66,21 +67,47 @@ export default function Home() {
     try {
       const msg = await generateMessageAction({ nomeMae, estilo, seuNome });
       const mensagem = msg.replace(/#/g, '');
-
-      
       setMensagem(mensagem);
     } catch (err) {
-      console.log(err);
-      console.error(err);
-      setMensagem(gerarLocal(estilo));
+
+     const msgErro = err +""
+      if(msgErro!=="Error: LIMIT_REACHED"){
+        setMensagem(gerarLocal(estilo));
+        console.error(err);
+      }
+      setModalTela(true)
     } finally {
-      setLoading(false);
       setShowResult(true);
+      setLoading(false);
     }
   };
 
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-[#FFEFF3] font-geist-sans">
+      {modalTela && (
+        <div className="fixed inset-0 bg-black/80 bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full text-center space-y-4">
+            <h2 className="text-2xl font-semibold text-[#EA4C89]">Limite Gratuito Atingido</h2>
+            <p className="text-gray-700">Você atingiu o limite de cartões gratuitos por dia.</p>
+            <p className="text-gray-700">Deseja comprar mais 5 créditos?</p>
+            <div className="flex justify-center space-x-4 mt-4">
+              <button
+                onClick={() => {/* TODO: integrar compra */}}
+                className="px-6 py-2 bg-[#EA4C89] text-white rounded-lg shadow"
+              >
+                Comprar 5 créditos
+              </button>
+              <button
+                onClick={() => setModalTela(false)}
+                className="px-6 py-2 border border-[#EA4C89] text-[#EA4C89] rounded-lg"
+              >
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Estrelas decorativas */}
       <Image
         src="/image/star.png"

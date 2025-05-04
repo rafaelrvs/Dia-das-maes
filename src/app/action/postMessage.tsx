@@ -46,7 +46,7 @@ export async function generateMessageAction({
     });
   }
   if (count > 5) {
-    throw new Error('LIMIT_REACHED: Limite de 5 cartões por dia atingido.');
+    throw new Error('LIMIT_REACHED');
   }
 
   // 2) Monta o prompt
