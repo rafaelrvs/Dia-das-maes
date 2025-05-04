@@ -10,6 +10,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-Dancing:'Dancing Script', cursive;;
+  --color-primary-900: #f8b4d9;
 }
 
 @media (prefers-color-scheme: dark) {
