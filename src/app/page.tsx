@@ -13,37 +13,32 @@ import CardResult from "./Components/CardResult/CardResult";
 import { generateMessageAction } from "./action/postMessage";
 
 export default function Home() {
-  // const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [nomeMae, setNomeMae] = useState("");
   const [seuNome, setSeuNome] = useState("");
   const [estilo, setEstilo] = useState("Emocionante");
   const [mensagem, setMensagem] = useState("");
   const [showResult, setShowResult] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Revoga o object URL antigo
   useEffect(() => {
     return () => {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
 
-  // Abre o seletor de arquivo
   const handlePreviewClick = (e: MouseEvent) => {
     e.preventDefault();
     inputRef.current?.click();
   };
 
-  // Gera preview ao selecionar arquivo
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const sel = e.target.files?.[0] ?? null;
-  
     if (sel) setPreviewUrl(URL.createObjectURL(sel));
   };
 
-  // Fallback local
   function gerarLocal(estilo: string) {
     switch (estilo) {
       case "Emocionante":
@@ -59,26 +54,31 @@ export default function Home() {
     }
   }
 
-  // Chama a API do Gemini e, em caso de erro, usa gerarLocal
   const handleGenerate = async (e: MouseEvent) => {
     e.preventDefault();
     if (!nomeMae.trim() || !seuNome.trim()) {
       return alert("Por favor, preencha o nome da mãe e o seu nome.");
     }
 
+    setLoading(true);
+    setShowResult(false);
+
     try {
-      // **Aqui** chamamos diretamente a Server Action
       const msg = await generateMessageAction({ nomeMae, estilo, seuNome });
-      setMensagem(msg);
-  
+      const mensagem = msg.replace(/#/g, '');
+
       
+      setMensagem(mensagem);
     } catch (err) {
+      console.log(err);
       console.error(err);
       setMensagem(gerarLocal(estilo));
     } finally {
+      setLoading(false);
       setShowResult(true);
     }
   };
+
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-[#FFEFF3] font-geist-sans">
       {/* Estrelas decorativas */}
@@ -131,7 +131,7 @@ export default function Home() {
 
           <div className="h-48 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden bg-gray-50">
             {previewUrl ? (
-              <Image
+              <img
                 src={previewUrl}
                 alt="preview"
                 className="object-contain w-full h-full"
@@ -151,7 +151,7 @@ export default function Home() {
 
           <label className="text-gray-700 mb-1">Nome da sua mãe:</label>
           <Form.InputForms
-            className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+            className="border border-gray-300 rounded-lg p-2 mb-4 w-full text-gray-700/80"
             placeholder="Ex: Maria"
             type="text"
             value={nomeMae}
@@ -160,7 +160,7 @@ export default function Home() {
 
           <label className="text-gray-700 mb-1">Seu nome:</label>
           <Form.InputForms
-            className="border border-gray-300 rounded-lg p-2 mb-4 w-full"
+            className="border border-gray-300 rounded-lg p-2 mb-4 w-full text-gray-700/80"
             placeholder="Ex: João"
             type="text"
             value={seuNome}
@@ -169,7 +169,7 @@ export default function Home() {
 
           <label className="text-gray-700 mb-1">Estilo da mensagem:</label>
           <Form.SelectForms
-            className="border border-gray-300 rounded-lg p-2 mb-6 w-full"
+            className="border border-gray-300 rounded-lg p-2 mb-6 w-full text-gray-700"
             value={estilo}
             onChange={(e) => setEstilo(e.target.value)}
           >
@@ -181,9 +181,16 @@ export default function Home() {
 
           <button
             onClick={handleGenerate}
-            className="self-start px-4 py-2 bg-[#EC4899] text-white rounded-lg"
+            disabled={loading}
+            className={`self-start px-4 py-2 rounded-lg flex items-center ${loading ? 'bg-blue-300'  : 'bg-[#EC4899] text-white'}`}
           >
-            Gerar mensagem
+            {loading && (
+              <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+              </svg>
+            )}
+            {loading ? 'Gerando...' : 'Gerar mensagem'}
           </button>
         </div>
       </div>
