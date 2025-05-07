@@ -60,7 +60,7 @@ const CardResult: React.FC<CardResultProps> = ({ nome, previewUrl, mensagem }) =
             <img
               src={previewUrl}
               alt="Sua foto"
-              className="rounded-lg object-contain w-full h-full"
+              className="rounded-lg object-contain max-w-60 max-h-60"
             />
           ) : (
             <span className="text-gray-400">Nenhuma foto selecionada</span>
