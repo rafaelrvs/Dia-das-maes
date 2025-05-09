@@ -43,11 +43,12 @@ export async function POST(
         },
       ],
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/sucesso?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancelado`,
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}`,
     });
 
     // 3) Retorna URL e sessionId
+
     return NextResponse.json({
       url: session.url,
       sessionId: session.id,

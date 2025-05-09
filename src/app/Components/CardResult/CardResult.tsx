@@ -45,6 +45,7 @@ const CardResult: React.FC<CardResultProps> = ({ previewUrl, mensagem }) => {
       await prepareImages();
       const dataUrl = await htmlToImage.toPng(exportRef.current, {
         cacheBust: true,
+        backgroundColor: "#ffffff", // garante fundo branco
       });
       const link = document.createElement("a");
       link.href = dataUrl;
@@ -57,7 +58,11 @@ const CardResult: React.FC<CardResultProps> = ({ previewUrl, mensagem }) => {
 
   return (
     <div className="mt-8 w-full max-w-4xl bg-white rounded-2xl shadow-lg p-8">
-      <div ref={exportRef} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Aplica fundo branco direto no elemento exportado */}
+      <div
+        ref={exportRef}
+        className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white p-8 rounded-2xl"
+      >
         <div className="flex items-center justify-center">
           {previewUrl ? (
             <img

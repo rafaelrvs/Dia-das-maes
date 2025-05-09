@@ -123,7 +123,7 @@ export default function ModalTelaCredito({ setModalTela }: ModalProps) {
               placeholder="Digite seu e-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg"
+              className="w-full px-4 py-2 border rounded-lg "
               disabled={loading}
             />
             {error && <p className="text-red-500">{error}</p>}
@@ -145,7 +145,15 @@ export default function ModalTelaCredito({ setModalTela }: ModalProps) {
             </button>
           </>
         ) : (
-          <p>Checkout aberto, aguarde a confirmação de pagamento.</p>
+        
+            <div className="flex flex-col items-center space-y-4">
+              {/* Spinner */}
+              <div className="w-8 h-8 border-4 border-t-[#EA4C89] border-gray-200 rounded-full animate-spin" />
+              <p>Checkout aberto, aguarde a confirmação de pagamento.</p>
+            </div>
+         
+         
+          
         )}
       </div>
     </div>
