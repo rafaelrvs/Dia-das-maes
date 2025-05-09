@@ -14,10 +14,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
 export const metadata: Metadata = {
   title: "Mes das Maes",
-  description: "Com todo amor para todas as mães do brasil",
+  description: "Com todo amor  para todas as mães do Brasil",
 };
+
+
 
 export default function RootLayout({
   children,
