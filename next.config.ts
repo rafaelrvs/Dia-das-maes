@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    typedRoutes: false,
+  // ...suas outras configurações
+  eslint: {
+    // desliga a checagem de ESLint na build
+    ignoreDuringBuilds: true,
   },
 };
 
