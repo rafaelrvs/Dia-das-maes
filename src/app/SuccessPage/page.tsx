@@ -1,12 +1,9 @@
 // src/app/sucesso/page.tsx
 "use client"
-import { useRouter } from 'next/navigation';
-
 export const dynamic = 'force-dynamic';
 
 export default function SuccessPage() {
-  const router = useRouter();
-
+ 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white rounded-2xl shadow-lg p-8 max-w-sm w-full text-center">

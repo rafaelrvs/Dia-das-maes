@@ -5,9 +5,10 @@ import * as htmlToImage from "html-to-image";
 interface CardResultProps {
   previewUrl: string | null;
   mensagem: string;
+  nome:string;
 }
 
-const CardResult: React.FC<CardResultProps> = ({ previewUrl, mensagem }) => {
+const CardResult: React.FC<CardResultProps> = ({ previewUrl, mensagem ,nome}) => {
   const exportRef = useRef<HTMLDivElement>(null);
 
   // Converte imagens blob: para dataURL inline antes de exportar
@@ -71,7 +72,7 @@ const CardResult: React.FC<CardResultProps> = ({ previewUrl, mensagem }) => {
               className="rounded-lg object-contain max-w-60 max-h-60"
             />
           ) : (
-            <span className="text-gray-400">Nenhuma foto selecionada</span>
+            <span className="text-gray-400">Nenhuma foto selecionada{ nome}</span>
           )}
         </div>
         <div className="flex flex-col justify-between">

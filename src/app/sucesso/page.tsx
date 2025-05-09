@@ -1,12 +1,17 @@
-// src/app/sucesso/page.tsx
+"use client"
 import Stripe from 'stripe';
 
 export const dynamic = 'force-dynamic'; // garantir fetch fresh
 
-export default async function SuccessPage({
-  searchParams,
-}: { searchParams: { session_id?: string } }){
+interface PageProps {
+  searchParams: {
+    session_id?: string;
+  };
+}
+
+export default async function SuccessPage({ searchParams }: PageProps) {
   const sessionId = searchParams.session_id;
+
   if (!sessionId) {
     return <p>Parâmetro de sessão não encontrado.</p>;
   }
