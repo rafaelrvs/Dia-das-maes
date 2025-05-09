@@ -7,6 +7,18 @@ type ModalProps = {
   setModalTela: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// Tipagem da resposta da criação de sessão
+interface CreateCheckoutSessionResponse {
+  url: string;
+  sessionId: string;
+  error?: string;
+}
+
+// Tipagem da verificação de pagamento
+interface CheckPaymentResponse {
+  paymentStatus: 'paid' | 'unpaid' | string;
+}
+
 export default function ModalTelaCredito({ setModalTela }: ModalProps) {
   const [email, setEmail] = useState('');
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
@@ -30,13 +42,19 @@ export default function ModalTelaCredito({ setModalTela }: ModalProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: email }),
       });
-      const { url, sessionId: sid, error: errMsg } = await res.json();
-      if (!res.ok) throw new Error(errMsg || 'Erro ao criar sessão.');
-      setCheckoutUrl(url);
-      setSessionId(sid);
-      window.open(url, '_blank');
-    } catch (e: any) {
-      setError(e.message);
+
+      const data: CreateCheckoutSessionResponse = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Erro ao criar sessão.');
+      }
+
+      setCheckoutUrl(data.url);
+      setSessionId(data.sessionId);
+      window.open(data.url, '_blank');
+    } catch (e: unknown) {
+      // type guard para extrair mensagem de erro
+      const message = e instanceof Error ? e.message : String(e);
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -45,18 +63,23 @@ export default function ModalTelaCredito({ setModalTela }: ModalProps) {
   // Polling ao retornar ao foco para verificar pagamento
   const checkPayment = useCallback(async () => {
     if (!sessionId) return;
+
     try {
       const res = await fetch('/api/check-payment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId }),
       });
-      const { paymentStatus } = await res.json();
-      setPaymentStatus(paymentStatus);
-      if (paymentStatus === 'paid') {
+
+      const data: CheckPaymentResponse = await res.json();
+      setPaymentStatus(data.paymentStatus);
+
+      if (data.paymentStatus === 'paid') {
         window.removeEventListener('focus', checkPayment);
       }
-    } catch {}
+    } catch {
+      // se quiser, trate um erro aqui também
+    }
   }, [sessionId]);
 
   useEffect(() => {
@@ -66,7 +89,7 @@ export default function ModalTelaCredito({ setModalTela }: ModalProps) {
     }
   }, [checkoutUrl, sessionId, checkPayment]);
 
-  // Se pagamento confirmado, mostra mensagem e fecha o modal
+  // Se pagamento confirmado
   if (paymentStatus === 'paid') {
     return (
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">

@@ -1,21 +1,18 @@
 // src/app/sucesso/page.tsx
 import Stripe from 'stripe';
-import { cookies } from 'next/headers'; // se precisar auth
 
 export const dynamic = 'force-dynamic'; // garantir fetch fresh
 
 export default async function SuccessPage({
   searchParams,
-}: {
-  searchParams: { session_id?: string };
-}) {
+}: { searchParams: { session_id?: string } }){
   const sessionId = searchParams.session_id;
   if (!sessionId) {
     return <p>Parâmetro de sessão não encontrado.</p>;
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: '2022-11-15',
+    apiVersion: '2025-04-30.basil',
   });
 
   // Busca o status da sessão
@@ -32,7 +29,9 @@ export default async function SuccessPage({
         </>
       ) : (
         <>
-          <h1 className="text-3xl font-bold text-red-600">Pagamento não confirmado</h1>
+          <h1 className="text-3xl font-bold text-red-600">
+            Pagamento não confirmado
+          </h1>
           <p className="mt-4">Status: {session.payment_status}</p>
         </>
       )}

@@ -1,24 +1,25 @@
+// src/app/Components/CardResult/CardResult.tsx
 import React, { useRef } from "react";
 import * as htmlToImage from "html-to-image";
-import { jsPDF } from "jspdf";
 
 interface CardResultProps {
-  nome: string;
   previewUrl: string | null;
   mensagem: string;
 }
 
-const CardResult: React.FC<CardResultProps> = ({ nome, previewUrl, mensagem }) => {
+const CardResult: React.FC<CardResultProps> = ({ previewUrl, mensagem }) => {
   const exportRef = useRef<HTMLDivElement>(null);
 
   // Converte imagens blob: para dataURL inline antes de exportar
   const prepareImages = async () => {
     if (!exportRef.current) return;
-    const imgs = Array.from(exportRef.current.querySelectorAll('img')) as HTMLImageElement[];
+    const imgs = Array.from(
+      exportRef.current.querySelectorAll("img")
+    ) as HTMLImageElement[];
     await Promise.all(
       imgs.map((img) => {
         const src = img.src;
-        if (src.startsWith('blob:')) {
+        if (src.startsWith("blob:")) {
           return fetch(src)
             .then((res) => res.blob())
             .then(
@@ -42,7 +43,9 @@ const CardResult: React.FC<CardResultProps> = ({ nome, previewUrl, mensagem }) =
     if (!exportRef.current) return;
     try {
       await prepareImages();
-      const dataUrl = await htmlToImage.toPng(exportRef.current, { cacheBust: true });
+      const dataUrl = await htmlToImage.toPng(exportRef.current, {
+        cacheBust: true,
+      });
       const link = document.createElement("a");
       link.href = dataUrl;
       link.download = "mensagem-dia-das-maes.png";
@@ -83,7 +86,6 @@ const CardResult: React.FC<CardResultProps> = ({ nome, previewUrl, mensagem }) =
         >
           Compartilhar
         </button>
-  
       </div>
     </div>
   );
