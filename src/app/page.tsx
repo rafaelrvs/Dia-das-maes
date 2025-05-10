@@ -139,7 +139,7 @@ export default function Home() {
 
           <button
             onClick={handlePreviewClick}
-            className="self-start px-4 py-2 bg-[#EC4899] text-white rounded-lg mb-6"
+            className="self-start px-4 py-2 bg-[#EC4899] text-white rounded-lg mb-6 active:scale-105 durate-2"
           >
             Escolha a imagem
           </button>
@@ -197,7 +197,7 @@ export default function Home() {
           <button
             onClick={handleGenerate}
             disabled={loading}
-            className={`self-start px-4 py-2 rounded-lg flex items-center ${loading ? 'bg-blue-300'  : 'bg-[#EC4899] text-white'}`}
+            className={` active:scale-105 durate-2 self-start px-4 py-2 rounded-lg flex items-center ${loading ? 'bg-blue-300'  : 'bg-[#EC4899] text-white'}`}
           >
             {loading && (
               <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
