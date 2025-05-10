@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Mes das Maes",
-  description: "Com todo amor  para todas as mães do Brasil",
+  description: "Com todo amor  para todas as mães do Brasil.",
 };
 
 
