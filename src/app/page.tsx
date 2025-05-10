@@ -90,6 +90,7 @@ export default function Home() {
     }
   };
 
+
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-6 bg-[#FFEFF3] font-geist-sans">
       {modalTela && (
